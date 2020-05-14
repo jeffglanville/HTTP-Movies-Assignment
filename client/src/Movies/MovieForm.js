@@ -6,7 +6,7 @@ const initialMovie = {
   title: "",
   director: "",
   metascore: "",
-  stars: [],
+  stars: []
 };
 
 const MovieForm = (props) => {
