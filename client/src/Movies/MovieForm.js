@@ -45,18 +45,6 @@ const MovieForm = (props) => {
       .catch((err) => console.log("Error is: ", err));
   };
 
-  const deleteMovie = (e) => {
-    e.preventDefault();
-
-    axios
-      .delete(`http://localhost:5000/movies/${props.movies.id}`)
-      .then((res) => {
-        props.updateMovie(res.data);
-        props.history.push("/movies");
-      })
-      .catch((err) => console.log("Error is:", err));
-  };
-
   return (
     <div>
       <h1>Update Movie</h1>
@@ -94,8 +82,6 @@ const MovieForm = (props) => {
       >
         Update and Add
       </button>
-
-      <button onClick={deleteMovie}>Delete Selection</button>
     </div>
   );
 };
