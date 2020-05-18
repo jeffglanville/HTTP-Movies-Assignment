@@ -1,45 +1,61 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
-const initialMovie = {
-  id: "",
-  title: "",
-  director: "",
-  metascore: "",
-  stars: []
-};
+// const initialMovie = {
+//   id: "",
+//   title: "",
+//   director: "",
+//   metascore: "",
+//   stars: []
+// };
 
 const MovieForm = (props) => {
-  const [movie, setMovie] = useState(initialMovie);
+  console.log("getting prop", props)
+  const [movie] = useState();
+  const [newTitle, setNewTitle] = useState("")
+  const [newDirector, setNewDirector] = useState("")
+  const [newMetascore, setNewMetascore] = useState("")
+  const [newStars, setNewStars] = useState([])
+  // const param = useParams();
 
   useEffect(() => {
-    console.log(props.movies);
-    const updateMovie = props.movies.find((movie) => {
-      return `${movie.id}` === props.match.params.id;
-    });
+    axios
+      .get(`http://localhost:5000/api/movies/${props.match.params.id}`)
+      .then(res => console.log("Movie", res))
+      .catch(err => console.log("Err is", err.response))
+    // console.log(props.movies);
+    // const updateMovie = props.movies.find((movie) => {
+    //   return `${movie.id}` === props.match.params.id;
+    // });
 
-    console.log("Movie:", updateMovie);
+    // console.log("Movie:", updateMovie);
 
-    if (updateMovie) {
-      setMovie(updateMovie);
-    }
-  }, [props.movies, props.match.params.id]);
+    // if (updateMovie) {
+    //   setMovie(updateMovie);
+    // }
+  }, [props.match.params.id]);
 
-  const handleChange = (e) => {
-    setMovie({
-      ...movie,
-      [e.target.name]: e.target.value,
-    });
-  };
+  // const handleChange = (e) => {
+  //   setMovie({
+  //     ...movie,
+  //     [e.target.name]: e.target.value,
+  //   });
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const updatedMovie = {
+      title: newTitle || movie.title,
+      director: newDirector || movie.director,
+      metascore: newMetascore || movie.metascore,
+      stars: newStars || movie.stars
+    }
     axios
-      .put(`http://localhost:5000/movies/${props.movie.id}`, movie)
+      .put(`http://localhost:5000/movies/${props.match.params.id}`, updatedMovie)
       .then((res) => {
-        axios.get("http://localhost:5000/api/movies").then((res) => {
+        axios.get("http://localhost:5000/api/movieList").then((res) => {
           props.setMovie(res.data);
-          props.history.push(`/movies/${props.movie.id}`);
+          props.history.push(`/movies`);
         });
       })
       .catch((err) => console.log("Error is: ", err));
@@ -53,28 +69,33 @@ const MovieForm = (props) => {
           type="text"
           name="name"
           placeholder="Movie Title"
-          value={props.movies.title}
+          onChange={(e) => (
+            setNewTitle(e.target.value)
+          )}
         />
         <input
           type="text"
           name="name"
-          onChange={handleChange}
           placeholder="Director Name"
-          value={props.movies.director}
+          onChange={(e) => (
+            setNewDirector(e.target.value)
+          )}
         />
         <input
           type="text"
           name="name"
-          onChange={handleChange}
           placeholder="Metascore"
-          value={props.movies.metascore}
+          onChange={(e) => (
+            setNewMetascore(e.target.value)
+          )}
         />
         <input
           type="text"
           name="name"
-          onChange={handleChange}
           placeholder="Stars of the movie"
-          value={props.movies.stars}
+          onChange={(e) => (
+            setNewStars(e.target.value)
+          )}
         />
       </form>
       <button
