@@ -44,10 +44,10 @@ function Movie({ match, history, addToSavedList }) {
         Save
       </div>
       <div className="edit-button" onClick={() => history.push(`/edit-movie/${movie.id}`)}>
-        Edit
+        <button>Edit</button>
       </div>
       <div className="delete-button" onClick={handleDelete}>
-        Delete
+       <button>Delete</button>
       </div>
     </div>
   );
